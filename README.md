@@ -20,9 +20,15 @@
 
 <p align="center">
   <a href="#quick-start"><strong>Quick start</strong></a> ·
-  <a href="preview.html"><strong>Interactive preview &amp; quiz</strong></a> ·
+  <a href="https://m0-ar.github.io/vehicle-service-management-system/preview.html"><strong>Interactive preview &amp; quiz</strong></a> ·
   <a href="#beginner-guide"><strong>Beginner guide</strong></a> ·
   <a href="#plans"><strong>Plans</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://m0-ar.github.io/vehicle-service-management-system/"><strong>Open the live preview</strong></a> ·
+  <a href="https://m0-ar.github.io/vehicle-service-management-system/preview.html">/preview.html</a> ·
+  <a href="https://m0-ar.github.io/vehicle-service-management-system/docs/preview.html">/docs/preview.html</a>
 </p>
 
 <p align="center">
@@ -417,20 +423,37 @@ docs/                   architecture, security, research, roadmap
 
 ## Preview site and GitHub Pages
 
+**Live preview:** <https://m0-ar.github.io/vehicle-service-management-system/>
+
+All three entry points open the same page:
+
+| URL | What it is |
+| --- | --- |
+| <https://m0-ar.github.io/vehicle-service-management-system/> | Root entry (`index.html`) |
+| <https://m0-ar.github.io/vehicle-service-management-system/preview.html> | Canonical preview page |
+| <https://m0-ar.github.io/vehicle-service-management-system/docs/preview.html> | `/docs/` mirror that redirects to the canonical page |
+
 The repository includes a standalone, dependency-free marketing and learning page:
 
 - `preview.html` — product tour, feature atlas, economics calculator, learning
   path, FAQ and a scored quiz.
 - `index.html` — a zero-JavaScript redirect so the root of a static host opens the
   preview.
+- `docs/index.html` and `docs/preview.html` — redirect mirrors so the `/docs/`
+  URLs resolve too. They are small redirect pages, not duplicate copies.
 
 To publish with GitHub Pages:
 
 1. Push the repository to GitHub.
 2. Open **Settings → Pages**.
 3. Choose **Deploy from a branch**, select your default branch and the repository
-   root (`/`).
-4. Save. The preview will be served at `https://<owner>.github.io/<repo>/`.
+   root (`/`). The root source is required for all three URLs above.
+4. Save. The preview is served at
+   `https://m0-ar.github.io/vehicle-service-management-system/`.
+
+`.nojekyll` is included at the repository root so GitHub Pages serves the files
+as-is. After the first build, all three URLs should return HTTP 200; the
+`/docs/preview.html` URL redirects to `/preview.html`.
 
 All asset paths are relative, so the page works from a project subpath as well as
 a custom domain. Upload `assets/brand/banner.png` as the repository social preview
