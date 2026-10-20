@@ -1,0 +1,1625 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vehicle Service Manager — run your shop, not your paperwork</title>
+<meta name="description" content="An interactive tour of Vehicle Service Manager: service orders, photo inspections, estimates, invoices, booking, marketing and multi-tenant security. Includes a plain-English learning path and quiz.">
+<meta name="theme-color" content="#0E7A65">
+<meta property="og:title" content="Vehicle Service Manager — run your shop, not your paperwork">
+<meta property="og:description" content="The calm operating system for independent auto shops. Tour the product, explore the economics, learn the system and test yourself.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/brand/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230E7A65'/%3E%3Cpath d='M20.6 8.8a5 5 0 0 0-6.4 6.4l-5.5 5.5a1.8 1.8 0 0 0 2.6 2.6l5.5-5.5a5 5 0 0 0 6.4-6.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z' fill='none' stroke='%23FFFCF6' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --paper: #f4f0e6;
+    --paper-2: #ece7da;
+    --paper-3: #e3dccb;
+    --white: #fffdf7;
+    --ink: #14271f;
+    --ink-2: #31473d;
+    --muted: #64756b;
+    --line: rgba(20, 39, 31, .14);
+    --line-strong: rgba(20, 39, 31, .24);
+    --teal: #0e7a65;
+    --teal-deep: #0a5c4c;
+    --teal-soft: #dceae2;
+    --gold: #c28b3d;
+    --dark: #10251e;
+    --radius: 18px;
+    --shadow: 0 26px 70px rgba(20, 39, 31, .14);
+    --display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 520px at 88% -8%, rgba(173, 203, 184, .52), transparent 62%),
+      radial-gradient(900px 600px at -8% 32%, rgba(228, 216, 190, .55), transparent 60%),
+      var(--paper);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  body.no-scroll { overflow: hidden; }
+  ::selection { background: #bfe1d3; color: var(--ink); }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; }
+  button, input { font: inherit; }
+  button { color: inherit; }
+  h1, h2, h3, p, dl, dd, figure { margin-top: 0; }
+  h1, h2, h3 { line-height: 1.02; letter-spacing: -.04em; }
+  h1, h2 { font-family: var(--display); font-weight: 500; }
+  h3 { font-weight: 650; letter-spacing: -.025em; }
+  :focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
+  .wrap { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
+  .skip { position: absolute; left: 16px; top: -80px; z-index: 100; background: var(--ink); color: var(--white); padding: 10px 16px; border-radius: 8px; }
+  .skip:focus { top: 12px; }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 9px;
+    margin: 0 0 18px;
+    color: var(--teal-deep);
+    font-size: 11px; font-weight: 750; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; opacity: .55; }
+  .eyebrow.on-dark { color: #a9d6c4; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 4px rgba(14, 122, 101, .12); flex: 0 0 auto; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    min-height: 48px; padding: 0 20px;
+    border: 1px solid transparent; border-radius: 999px;
+    text-decoration: none; font-size: 14px; font-weight: 700; letter-spacing: -.01em;
+    cursor: pointer; transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    white-space: nowrap;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--teal); color: #fffdf7; box-shadow: 0 8px 24px rgba(14, 122, 101, .2); }
+  .btn-primary:hover { background: var(--teal-deep); }
+  .btn-ghost { background: rgba(255, 253, 247, .55); border-color: var(--line-strong); }
+  .btn-ghost:hover { background: var(--white); border-color: var(--ink); }
+  .btn-dark { background: var(--ink); color: var(--white); }
+  .btn-dark:hover { background: #203b31; }
+  .btn-sm { min-height: 40px; padding: 0 15px; font-size: 12.5px; }
+  .arrow { font-size: 16px; line-height: 1; }
+
+  .site-head {
+    position: sticky; top: 0; z-index: 60;
+    background: rgba(244, 240, 230, .82);
+    border-bottom: 1px solid transparent;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .site-head.is-scrolled { border-color: var(--line); background: rgba(244, 240, 230, .94); }
+  .head-inner { height: 72px; display: flex; align-items: center; gap: 28px; }
+  .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font-size: 14px; font-weight: 760; letter-spacing: -.02em; flex: 0 0 auto; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); display: grid; place-items: center; box-shadow: 0 5px 15px rgba(14, 122, 101, .2); }
+  .brand-mark svg { width: 19px; height: 19px; color: #fff; }
+  .brand small { display: block; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); line-height: 1; margin-top: 3px; }
+  .nav { display: flex; align-items: center; gap: 24px; margin-left: auto; }
+  .nav a { text-decoration: none; font-size: 15px; font-weight: 600; color: var(--ink-2); }
+  .nav a:hover { color: var(--teal-deep); }
+  .head-cta { margin-left: 4px; }
+  .cta-short { display: none; }
+  .scroll-line { position: fixed; left: 0; top: 0; z-index: 70; height: 2px; width: 0; background: var(--teal); transition: width .1s linear; }
+
+  .hero { padding: clamp(58px, 8vw, 102px) 0 54px; }
+  .hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: clamp(34px, 5vw, 74px); align-items: center; }
+  .hero h1 { font-size: clamp(58px, 7.3vw, 96px); margin: 0 0 26px; letter-spacing: -.055em; line-height: .93; }
+  .hero h1 em { color: var(--teal-deep); font-style: italic; }
+  .hero-lede { max-width: 585px; margin-bottom: 30px; color: var(--ink-2); font-size: clamp(17px, 1.7vw, 20px); line-height: 1.58; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; align-items: center; }
+  .hero-note { margin: 16px 0 0; color: var(--muted); font-size: 12.5px; display: flex; align-items: center; gap: 8px; }
+  .hero-note svg { width: 15px; height: 15px; color: var(--teal); flex: 0 0 auto; }
+  .hero-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 34px 0 0; padding-top: 24px; border-top: 1px solid var(--line); max-width: 560px; }
+  .hero-metrics dt { font-family: var(--display); font-size: 30px; line-height: 1; letter-spacing: -.04em; margin-bottom: 5px; }
+  .hero-metrics dd { margin: 0; color: var(--muted); font-size: 11.5px; line-height: 1.35; }
+
+  .hero-art { position: relative; min-height: 620px; isolation: isolate; }
+  .hero-art::before {
+    content: ""; position: absolute; z-index: -1; inset: 5% -8% 2% 8%;
+    border: 1px solid rgba(14, 122, 101, .18); border-radius: 48% 52% 44% 56% / 58% 42% 58% 42%;
+    background: radial-gradient(circle at 60% 40%, rgba(230, 239, 228, .85), rgba(230, 239, 228, 0) 68%);
+    transform: rotate(8deg);
+  }
+  .browser {
+    position: absolute; z-index: 2; top: 38px; left: 6px; right: 16px;
+    background: var(--white); border: 1px solid var(--line); border-radius: 17px;
+    box-shadow: var(--shadow); overflow: hidden; transform: rotate(-1.2deg);
+  }
+  .browser-bar { height: 33px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: #f7f3e9; border-bottom: 1px solid var(--line); }
+  .browser-bar i { width: 7px; height: 7px; border-radius: 50%; background: #d6cdbb; }
+  .browser-bar i:first-child { background: #dba493; }
+  .browser-url { margin-left: 7px; flex: 1; height: 18px; border-radius: 5px; background: rgba(20,39,31,.05); color: #819086; font-family: var(--mono); font-size: 8px; display: flex; align-items: center; padding: 0 7px; }
+  .browser img { display: block; width: 100%; height: auto; aspect-ratio: 1425 / 1086; }
+  .float-card {
+    position: absolute; z-index: 3; background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px; box-shadow: 0 18px 50px rgba(20, 39, 31, .18);
+  }
+  .float-dvi { right: -6px; bottom: 23px; width: 306px; transform: rotate(2.2deg); overflow: hidden; animation: drift 9s ease-in-out infinite; }
+  .float-dvi .float-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px 8px; font-size: 10px; font-weight: 750; letter-spacing: .03em; }
+  .float-dvi .pill-live { color: var(--teal-deep); background: var(--teal-soft); border-radius: 99px; padding: 3px 7px; font-size: 8px; letter-spacing: .08em; }
+  .float-dvi img { width: 100%; height: 152px; object-fit: cover; object-position: bottom; border-top: 1px solid var(--line); }
+  .float-dvi p { margin: 0; padding: 9px 12px 11px; color: var(--muted); font-size: 10.5px; line-height: 1.4; }
+  .float-dvi p strong { color: var(--ink); }
+  .float-est { left: -22px; bottom: -13px; width: 252px; padding: 16px 17px 15px; transform: rotate(-3deg); animation: drift 10s ease-in-out infinite reverse; }
+  .float-est .mini { color: var(--muted); font-size: 9px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+  .float-est .amount { font-family: var(--display); font-size: 34px; letter-spacing: -.04em; line-height: 1.1; margin: 3px 0 3px; }
+  .float-est .sub { color: var(--muted); font-size: 10.5px; }
+  .approved { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 7px; color: var(--teal-deep); font-size: 10.5px; font-weight: 700; }
+  .approved span { width: 17px; height: 17px; display: grid; place-items: center; background: var(--teal); color: white; border-radius: 50%; font-size: 10px; }
+  @keyframes drift { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+
+  .stat-band { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255, 253, 247, .35); }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 27px 26px 25px; border-left: 1px solid var(--line); }
+  .stat:first-child { border-left: 0; padding-left: 0; }
+  .stat b { display: block; font-family: var(--display); font-weight: 500; font-size: clamp(29px, 3vw, 39px); line-height: 1; letter-spacing: -.045em; }
+  .stat span { display: block; margin-top: 8px; color: var(--muted); font-size: 11.5px; line-height: 1.4; max-width: 190px; }
+  .stat-source { display: flex; justify-content: space-between; gap: 24px; padding: 10px 0 12px; color: var(--muted); font-size: 10.5px; border-top: 1px solid var(--line); }
+  .stat-source a { color: var(--ink-2); text-decoration-color: rgba(20,39,31,.3); text-underline-offset: 3px; }
+
+  .section { padding: clamp(78px, 9vw, 122px) 0; }
+  .section-head { display: grid; grid-template-columns: 1.08fr .92fr; gap: 30px 70px; align-items: end; margin-bottom: 48px; }
+  .section-head h2 { font-size: clamp(40px, 5vw, 65px); margin: 0; letter-spacing: -.05em; max-width: 780px; }
+  .section-head h2 em { color: var(--teal-deep); font-style: italic; }
+  .section-intro { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 440px; justify-self: end; }
+  .section-intro strong { color: var(--ink); font-weight: 650; }
+
+  .day-shell { border: 1px solid var(--line); border-radius: 24px; background: rgba(255, 253, 247, .48); padding: 12px; box-shadow: 0 18px 60px rgba(20,39,31,.05); }
+  .day-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 4px; }
+  .day-tab {
+    appearance: none; border: 0; border-radius: 13px; background: transparent; color: var(--muted);
+    padding: 13px 12px 12px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 9px;
+    font-size: 12px; font-weight: 700; transition: background .18s, color .18s;
+  }
+  .day-tab span { font-family: var(--mono); font-size: 9px; opacity: .6; }
+  .day-tab:hover { background: rgba(20,39,31,.04); color: var(--ink); }
+  .day-tab[aria-selected="true"] { background: var(--ink); color: var(--white); }
+  .day-tab[aria-selected="true"] span { opacity: .65; }
+  .day-panel { display: grid; grid-template-columns: .86fr 1.14fr; gap: clamp(26px, 4vw, 54px); padding: clamp(25px, 4vw, 45px); align-items: center; }
+  .day-kicker { color: var(--teal-deep); font-size: 10.5px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 12px; }
+  .day-copy h3 { font-family: var(--display); font-size: clamp(30px, 3.4vw, 43px); font-weight: 500; line-height: 1.03; margin: 0 0 17px; letter-spacing: -.045em; }
+  .day-copy > p { color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 21px; max-width: 430px; }
+  .day-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .day-list li { position: relative; padding-left: 22px; font-size: 12.5px; line-height: 1.45; color: var(--ink-2); }
+  .day-list li::before { content: ""; position: absolute; left: 0; top: .45em; width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--teal); background: rgba(14,122,101,.1); }
+  .day-meta { display: inline-flex; margin-top: 22px; padding: 6px 10px; border-radius: 99px; background: var(--teal-soft); color: var(--teal-deep); font-size: 10px; font-weight: 700; letter-spacing: .03em; }
+  .day-figure { margin: 0; padding: 0; }
+  .day-frame { border: 1px solid var(--line); border-radius: 15px; background: var(--white); overflow: hidden; box-shadow: 0 20px 55px rgba(20, 39, 31, .12); }
+  .day-frame .browser-bar { background: #f8f5ec; }
+  .day-zoom { display: block; width: 100%; padding: 0; margin: 0; border: 0; background: #f8f5ec; cursor: zoom-in; position: relative; }
+  .day-zoom::after { content: "Click to enlarge"; position: absolute; right: 10px; bottom: 10px; background: rgba(16,37,30,.78); color: white; border-radius: 99px; padding: 4px 9px; font-size: 9px; font-weight: 650; opacity: 0; transition: opacity .2s; }
+  .day-zoom:hover::after { opacity: 1; }
+  .day-zoom img { width: 100%; height: clamp(300px, 34vw, 430px); object-fit: cover; object-position: top; transition: opacity .16s ease; }
+  .day-zoom img.is-swapping { opacity: .25; }
+  .day-caption { display: flex; align-items: center; gap: 8px; margin: 11px 2px 0; color: var(--muted); font-size: 10.5px; }
+  .day-caption .dot { width: 5px; height: 5px; box-shadow: none; }
+
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; }
+  .feature {
+    position: relative; min-height: 255px; padding: 26px 24px 23px;
+    border: 1px solid var(--line); border-radius: 18px; background: rgba(255, 253, 247, .5);
+    transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+    overflow: hidden;
+  }
+  .feature::after { content: ""; position: absolute; right: -45px; top: -55px; width: 120px; height: 120px; border: 1px solid rgba(14,122,101,.12); border-radius: 50%; }
+  .feature:hover { transform: translateY(-3px); background: var(--white); border-color: rgba(14,122,101,.3); box-shadow: 0 16px 38px rgba(20,39,31,.07); }
+  .feature-icon { width: 41px; height: 41px; border-radius: 11px; display: grid; place-items: center; background: var(--teal-soft); color: var(--teal-deep); margin-bottom: 21px; }
+  .feature-icon svg { width: 20px; height: 20px; }
+  .feature h3 { font-size: 17px; margin: 0 0 8px; letter-spacing: -.02em; }
+  .feature p { margin: 0; color: var(--muted); font-size: 12.8px; line-height: 1.6; }
+  .feature-tag { position: absolute; top: 25px; right: 22px; color: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: .03em; }
+  .feature.dark { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .feature.dark p { color: #b8c5bc; }
+  .feature.dark .feature-icon { background: rgba(255,255,255,.09); color: #b9e1ce; }
+  .feature.dark .feature-tag { color: #83978b; }
+
+  .trust { background: var(--dark); color: var(--paper); position: relative; overflow: hidden; }
+  .trust::before { content: ""; position: absolute; inset: 0; background: radial-gradient(600px 400px at 88% 18%, rgba(43,117,94,.35), transparent 70%); pointer-events: none; }
+  .trust .wrap { position: relative; }
+  .trust-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: clamp(38px, 7vw, 90px); align-items: center; }
+  .trust h2 { font-size: clamp(41px, 5vw, 65px); font-weight: 500; margin: 0 0 24px; letter-spacing: -.05em; }
+  .trust h2 em { font-style: italic; color: #a5d4c0; }
+  .trust p { color: #b7c5bc; font-size: 15.5px; line-height: 1.7; max-width: 470px; }
+  .trust-list { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 13px; }
+  .trust-list li { display: flex; gap: 11px; align-items: flex-start; color: #e1e8df; font-size: 13px; line-height: 1.45; }
+  .trust-list svg { width: 16px; height: 16px; color: #8ecab1; flex: 0 0 auto; margin-top: 2px; }
+  .diagram { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.035); border-radius: 20px; padding: 24px; }
+  .diagram-label { display: flex; justify-content: space-between; gap: 10px; color: #8ca194; font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 15px; }
+  .flow { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .flow span.chip { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 7px 10px; color: #dce8df; font-family: var(--mono); font-size: 10px; }
+  .flow .arrowline { color: #658073; font-size: 13px; }
+  .tenant-stack { display: grid; gap: 8px; }
+  .tenant-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid rgba(255,255,255,.11); border-radius: 11px; padding: 11px 13px; color: #c4d2c8; font-size: 11.5px; }
+  .tenant-row b { color: #f1f4ef; font-size: 12px; }
+  .tenant-row .status { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: #8ecab1; border: 1px solid rgba(142,202,177,.28); border-radius: 99px; padding: 3px 7px; }
+  .tenant-row.off { opacity: .43; }
+  .tenant-row.off .status { color: #d3b4a8; border-color: rgba(211,180,168,.25); }
+  .diagram-note { margin-top: 18px; display: flex; align-items: center; gap: 10px; padding: 12px 13px; background: rgba(14,122,101,.14); border: 1px solid rgba(142,202,177,.2); border-radius: 10px; }
+  .diagram-note svg { width: 18px; height: 18px; color: #96d2b7; flex: 0 0 auto; }
+  .diagram-note span { color: #a9c9b9; font-size: 10px; }
+  .diagram-note strong { display: block; color: #eef5ef; font-size: 11.5px; font-weight: 650; }
+
+  .economics-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 16px; align-items: stretch; }
+  .calc { padding: clamp(25px, 3.4vw, 38px); border: 1px solid var(--line); border-radius: 20px; background: rgba(255,253,247,.62); }
+  .calc h3 { font-family: var(--display); font-size: 31px; font-weight: 500; margin: 0 0 9px; letter-spacing: -.04em; }
+  .calc .hint { color: var(--muted); font-size: 12.5px; margin: 0 0 24px; }
+  .field { margin-top: 21px; }
+  .field label { display: flex; justify-content: space-between; align-items: baseline; gap: 15px; font-size: 11.5px; font-weight: 700; color: var(--ink-2); }
+  .field output { font-family: var(--display); font-size: 20px; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
+  input[type="range"] { width: 100%; margin: 10px 0 0; accent-color: var(--teal); height: 4px; cursor: pointer; }
+  .calc-foot { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 14px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+  .result-card {
+    position: relative; overflow: hidden; border-radius: 20px; padding: clamp(28px, 4vw, 48px);
+    background: var(--teal); color: #f8f5ec; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .result-card::before { content: ""; position: absolute; width: 420px; height: 420px; right: -170px; top: -190px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; }
+  .result-card::after { content: ""; position: absolute; width: 260px; height: 260px; right: -60px; top: -80px; border: 1px solid rgba(255,255,255,.13); border-radius: 50%; }
+  .result-kicker { color: #c2e5d5; font-size: 10px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+  .result-number { font-family: var(--display); font-size: clamp(63px, 8vw, 100px); line-height: .88; letter-spacing: -.06em; margin: 24px 0 8px; position: relative; z-index: 1; }
+  .result-number small { font-family: var(--sans); font-size: 12px; letter-spacing: normal; font-weight: 650; color: #c2e5d5; display: block; margin-top: 9px; }
+  .result-caption { position: relative; z-index: 1; color: #d6eadf; font-size: 12px; line-height: 1.55; max-width: 350px; }
+  .result-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 29px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.2); position: relative; z-index: 1; }
+  .result-split b { display: block; font-family: var(--display); font-size: 25px; font-weight: 500; line-height: 1; letter-spacing: -.03em; }
+  .result-split span { display: block; color: #b7ddca; font-size: 9.5px; margin-top: 6px; }
+
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch; }
+  .plan { border: 1px solid var(--line); border-radius: 19px; background: rgba(255,253,247,.55); padding: 26px 24px 23px; display: flex; flex-direction: column; position: relative; }
+  .plan.featured { border: 1.5px solid var(--teal); background: var(--white); box-shadow: 0 18px 50px rgba(20,39,31,.08); }
+  .plan-badge { position: absolute; right: 17px; top: 17px; border-radius: 99px; background: var(--teal); color: white; padding: 4px 9px; font-size: 8px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+  .plan-name { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--teal-deep); margin-bottom: 15px; }
+  .plan-price { font-family: var(--display); font-size: 49px; font-weight: 500; letter-spacing: -.05em; line-height: 1; }
+  .plan-price small { font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+  .plan-desc { min-height: 43px; margin: 9px 0 19px; color: var(--muted); font-size: 11.5px; line-height: 1.5; }
+  .plan ul { list-style: none; margin: 0 0 24px; padding: 15px 0 0; border-top: 1px solid var(--line); display: grid; gap: 8px; flex: 1; }
+  .plan li { display: flex; gap: 8px; font-size: 11.5px; line-height: 1.4; color: var(--ink-2); }
+  .plan li svg { width: 13px; height: 13px; flex: 0 0 auto; margin-top: 2px; color: var(--teal); }
+  .plan li.off { color: #9ba79f; }
+  .plan li.off svg { color: #b7c0b9; }
+  .plan .btn { width: 100%; }
+  .plan-note { margin: 14px 0 0; color: var(--muted); font-size: 10px; }
+
+  .learn-shell { display: grid; grid-template-columns: .68fr 1.32fr; gap: 42px; align-items: start; }
+  .learn-aside { position: sticky; top: 100px; }
+  .learn-aside h3 { font-family: var(--display); font-size: 34px; font-weight: 500; letter-spacing: -.045em; margin: 0 0 13px; }
+  .learn-aside p { color: var(--muted); font-size: 13.5px; line-height: 1.65; max-width: 320px; }
+  .progress-wrap { margin-top: 25px; }
+  .progress-label { display: flex; justify-content: space-between; gap: 10px; font-size: 10px; font-weight: 750; color: var(--muted); margin-bottom: 7px; }
+  .progress-track { height: 5px; border-radius: 99px; background: var(--paper-3); overflow: hidden; }
+  .progress-track span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--teal); transition: width .25s ease; }
+  .learn-foot { margin-top: 22px; padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+  .learn-foot a { color: var(--teal-deep); font-weight: 700; }
+  .module-list { display: grid; gap: 9px; }
+  .module { border: 1px solid var(--line); border-radius: 15px; background: rgba(255,253,247,.45); overflow: hidden; }
+  .module[open] { background: var(--white); border-color: rgba(14,122,101,.26); }
+  .module summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 17px 18px; }
+  .module summary::-webkit-details-marker { display: none; }
+  .module-num { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: 9px; font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .module[open] .module-num { background: var(--teal); border-color: var(--teal); color: white; }
+  .module-title { font-size: 14px; font-weight: 750; letter-spacing: -.015em; }
+  .module-title small { display: block; color: var(--muted); font-size: 10px; font-weight: 500; letter-spacing: 0; margin-top: 2px; }
+  .chevron { width: 15px; height: 15px; color: var(--muted); transition: transform .2s; }
+  .module[open] .chevron { transform: rotate(180deg); }
+  .module-body { padding: 0 18px 17px 70px; }
+  .module-body p { margin: 0 0 10px; color: var(--ink-2); font-size: 12px; line-height: 1.6; }
+  .module-body ul { margin: 0 0 14px; padding-left: 16px; color: var(--muted); font-size: 11.5px; line-height: 1.55; }
+  .module-body li + li { margin-top: 4px; }
+  .module-check { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 10.5px; font-weight: 650; cursor: pointer; }
+  .module-check input { accent-color: var(--teal); width: 14px; height: 14px; cursor: pointer; }
+  .learn-done { display: none; margin-top: 14px; padding: 12px 14px; border-radius: 11px; background: var(--teal-soft); color: var(--teal-deep); font-size: 11px; font-weight: 650; }
+  .learn-done.show { display: block; }
+
+  .quiz-section { background: linear-gradient(180deg, transparent, rgba(255,253,247,.45)); border-top: 1px solid var(--line); }
+  .quiz-shell { max-width: 900px; margin-inline: auto; border: 1px solid var(--line); border-radius: 23px; background: var(--white); box-shadow: 0 26px 70px rgba(20,39,31,.08); overflow: hidden; }
+  .quiz-top { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 16px 24px 0; }
+  .quiz-meta { color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .04em; }
+  .quiz-score { color: var(--teal-deep); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .quiz-track { height: 3px; background: var(--paper-2); margin: 13px 24px 0; border-radius: 99px; overflow: hidden; }
+  .quiz-track span { display: block; height: 100%; width: 0; background: var(--teal); transition: width .25s ease; }
+  .quiz-body { padding: clamp(24px, 4vw, 44px); min-height: 395px; display: flex; flex-direction: column; justify-content: center; }
+  .q-tag { color: var(--teal-deep); font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 11px; }
+  .q-title { font-family: var(--display); font-size: clamp(26px, 3.3vw, 37px); font-weight: 500; letter-spacing: -.045em; line-height: 1.08; margin: 0 0 23px; max-width: 690px; }
+  .options { display: grid; gap: 8px; }
+  .quiz-option {
+    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; cursor: pointer;
+    background: rgba(244,240,230,.55); border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 13px; color: var(--ink-2); font-size: 12.5px; line-height: 1.4;
+    transition: background .15s, border-color .15s, transform .15s;
+  }
+  .quiz-option:hover:not(:disabled) { background: var(--paper); border-color: var(--line-strong); transform: translateX(2px); }
+  .quiz-option:disabled { cursor: default; opacity: 1; }
+  .quiz-letter { width: 25px; height: 25px; flex: 0 0 auto; border-radius: 7px; border: 1px solid var(--line); display: grid; place-items: center; font-family: var(--mono); font-size: 9px; color: var(--muted); background: var(--white); }
+  .quiz-option.correct { border-color: #63a98c; background: #e5f2e9; color: #20553d; }
+  .quiz-option.correct .quiz-letter { background: #2f8364; color: white; border-color: #2f8364; }
+  .quiz-option.wrong { border-color: #d5a08d; background: #fbebe4; color: #7e3d2a; }
+  .quiz-option.wrong .quiz-letter { background: #b76448; color: white; border-color: #b76448; }
+  .feedback { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 14px; font-size: 11.5px; line-height: 1.6; color: var(--muted); }
+  .feedback strong { color: var(--ink); }
+  .feedback[hidden] { display: none; }
+  .quiz-next { margin-top: 18px; align-self: flex-start; }
+  .quiz-next[hidden] { display: none; }
+  .result-view { text-align: center; align-items: center; display: flex; flex-direction: column; }
+  .result-ring { width: 145px; height: 145px; border-radius: 50%; padding: 7px; background: conic-gradient(var(--teal) var(--pct, 0%), var(--paper-3) 0); margin-bottom: 22px; }
+  .result-ring > div { width: 100%; height: 100%; border-radius: 50%; background: var(--white); display: grid; place-items: center; }
+  .result-ring b { font-family: var(--display); font-size: 41px; font-weight: 500; letter-spacing: -.05em; line-height: 1; }
+  .result-ring span { display: block; color: var(--muted); font-size: 9px; margin-top: 4px; }
+  .result-title { font-family: var(--display); font-size: 35px; letter-spacing: -.04em; margin: 0 0 8px; }
+  .result-copy { color: var(--muted); font-size: 12px; line-height: 1.6; max-width: 420px; margin: 0 0 21px; }
+  .quiz-actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: center; }
+
+  .faq-grid { display: grid; grid-template-columns: .75fr 1.25fr; gap: 55px; align-items: start; }
+  .faq-aside h2 { font-size: clamp(38px, 4.6vw, 57px); margin-bottom: 15px; }
+  .faq-aside p { color: var(--muted); font-size: 13.5px; max-width: 300px; }
+  .faq-list { border-top: 1px solid var(--line); }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 18px 0; display: flex; justify-content: space-between; gap: 18px; align-items: center; font-size: 14px; font-weight: 700; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary svg { width: 15px; height: 15px; color: var(--muted); flex: 0 0 auto; transition: transform .2s; }
+  .faq-item[open] summary svg { transform: rotate(45deg); }
+  .faq-item p { margin: -4px 0 18px; color: var(--muted); font-size: 12.5px; line-height: 1.7; max-width: 610px; }
+
+  .run { background: var(--ink); color: var(--paper); }
+  .run-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(35px, 7vw, 85px); align-items: center; }
+  .run h2 { font-size: clamp(43px, 5.5vw, 70px); margin: 0 0 22px; }
+  .run h2 em { color: #a8d6c3; font-style: italic; }
+  .run p { color: #b7c5bc; font-size: 14px; line-height: 1.7; max-width: 460px; }
+  .run-note { display: flex; gap: 9px; margin-top: 25px; color: #8fa498; font-size: 10.5px; line-height: 1.5; }
+  .run-note svg { width: 16px; height: 16px; flex: 0 0 auto; color: #8ecab1; }
+  .terminal { border: 1px solid rgba(255,255,255,.14); border-radius: 15px; background: #0b1c16; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,.2); }
+  .terminal-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 13px; border-bottom: 1px solid rgba(255,255,255,.1); color: #799184; font-family: var(--mono); font-size: 9px; }
+  .copy-btn { background: rgba(255,255,255,.08); color: #cfe1d6; border: 1px solid rgba(255,255,255,.12); border-radius: 6px; font-family: var(--mono); font-size: 9px; padding: 4px 7px; cursor: pointer; }
+  .copy-btn:hover { background: rgba(255,255,255,.14); }
+  .terminal pre { margin: 0; padding: 20px; overflow: auto; color: #d4e4d9; font-family: var(--mono); font-size: 11px; line-height: 1.75; }
+  .terminal .c { color: #719083; }
+  .terminal .g { color: #92d2b5; }
+  .credential { margin-top: 19px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .credential div { border: 1px solid rgba(255,255,255,.12); border-radius: 9px; padding: 9px 11px; }
+  .credential span { display: block; color: #7f9788; font-size: 8px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+  .credential b { color: #dbe9df; font-family: var(--mono); font-size: 9.5px; font-weight: 500; }
+
+  .site-foot { background: #0b1c16; color: #81978a; border-top: 1px solid rgba(255,255,255,.07); padding: 30px 0; }
+  .foot-inner { display: flex; justify-content: space-between; gap: 25px; align-items: flex-start; }
+  .foot-brand { display: flex; align-items: center; gap: 10px; color: #d5e3d9; font-size: 12px; font-weight: 700; }
+  .foot-brand .brand-mark { width: 28px; height: 28px; border-radius: 8px; }
+  .foot-brand .brand-mark svg { width: 15px; height: 15px; }
+  .foot-note { max-width: 560px; font-size: 10px; line-height: 1.6; text-align: right; }
+  .foot-note a { color: #aac3b3; text-underline-offset: 2px; }
+
+  .lightbox { position: fixed; z-index: 100; inset: 0; background: rgba(9, 20, 16, .9); display: flex; align-items: center; justify-content: center; padding: 28px; }
+  .lightbox[hidden] { display: none; }
+  .lightbox-inner { width: min(1160px, 100%); max-height: 92vh; display: flex; flex-direction: column; gap: 10px; }
+  .lightbox img { width: 100%; max-height: calc(92vh - 50px); object-fit: contain; background: var(--white); border-radius: 11px; }
+  .lightbox-caption { color: #d7e3da; font-size: 11px; display: flex; justify-content: space-between; gap: 15px; }
+  .lightbox-close { position: absolute; right: 20px; top: 17px; width: 37px; height: 37px; border-radius: 50%; background: rgba(255,255,255,.12); color: white; border: 1px solid rgba(255,255,255,.2); font-size: 19px; cursor: pointer; }
+
+  @media (max-width: 1040px) {
+    .nav { gap: 17px; }
+    .nav a { font-size: 13.5px; }
+    .hero-grid { grid-template-columns: 1fr .92fr; gap: 28px; }
+    .hero-art { min-height: 545px; }
+    .float-dvi { width: 275px; }
+    .float-est { width: 228px; }
+    .feature { min-height: 270px; }
+  }
+  @media (max-width: 900px) {
+    .nav { display: none; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-copy { max-width: 720px; }
+    .hero-art { width: 100%; max-width: 650px; min-height: 600px; margin: 10px auto 0; }
+    .hero-art::before { inset: 4% 2% 2%; transform: rotate(3deg); }
+    .section-head { grid-template-columns: 1fr; gap: 18px; }
+    .section-intro { justify-self: start; max-width: 600px; }
+    .day-panel { grid-template-columns: 1fr; }
+    .day-copy > p { max-width: 650px; }
+    .day-zoom img { height: 440px; }
+    .feature-grid { grid-template-columns: repeat(2, 1fr); }
+    .trust-grid { grid-template-columns: 1fr; }
+    .economics-grid { grid-template-columns: 1fr; }
+    .plans { grid-template-columns: 1fr; max-width: 540px; margin-inline: auto; }
+    .plan-desc { min-height: 0; }
+    .learn-shell { grid-template-columns: 1fr; gap: 28px; }
+    .learn-aside { position: static; }
+    .learn-aside p { max-width: 600px; }
+    .faq-grid { grid-template-columns: 1fr; gap: 25px; }
+    .run-grid { grid-template-columns: 1fr; }
+    .foot-inner { flex-direction: column; }
+    .foot-note { text-align: left; }
+  }
+  @media (max-width: 640px) {
+    .wrap { width: min(100% - 30px, 1180px); }
+    .head-inner { height: 64px; }
+    .brand small { display: none; }
+    .head-cta { padding: 0 13px; min-height: 38px; font-size: 11px; }
+    .hero { padding-top: 44px; }
+    .hero h1 { font-size: clamp(48px, 14.5vw, 68px); }
+    .hero-metrics { gap: 12px; }
+    .hero-metrics dt { font-size: 25px; }
+    .hero-metrics dd { font-size: 10px; }
+    .hero-art { min-height: 410px; margin-top: 0; }
+    .hero-art::before { inset: 4% 2% 2%; transform: rotate(3deg); }
+    .browser { top: 15px; left: 0; right: 5px; }
+    .float-dvi { width: 190px; right: -7px; bottom: 6px; }
+    .float-dvi img { height: 90px; }
+    .float-dvi .float-head { font-size: 8px; padding: 8px 9px 6px; }
+    .float-dvi p { font-size: 8px; padding: 6px 9px 8px; }
+    .float-est { width: 165px; left: -8px; bottom: -7px; padding: 11px 11px 10px; }
+    .float-est .amount { font-size: 25px; }
+    .float-est .mini, .float-est .sub { font-size: 7.5px; }
+    .approved { font-size: 8px; margin-top: 8px; padding-top: 7px; }
+    .approved span { width: 14px; height: 14px; font-size: 8px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .stat { padding: 20px 16px; }
+    .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+    .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .stat-source { flex-direction: column; gap: 4px; }
+    .section { padding: 72px 0; }
+    .section-head { margin-bottom: 32px; }
+    .day-shell { padding: 7px; border-radius: 18px; }
+    .day-tabs { overflow-x: auto; grid-template-columns: repeat(5, minmax(116px, 1fr)); scrollbar-width: none; }
+    .day-tabs::-webkit-scrollbar { display: none; }
+    .day-tab { padding: 10px; font-size: 10.5px; }
+    .day-panel { padding: 21px 15px 18px; }
+    .day-zoom img { height: 245px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .feature { min-height: 0; }
+    .result-number { font-size: 70px; }
+    .module summary { grid-template-columns: 34px 1fr auto; padding: 14px 13px; gap: 9px; }
+    .module-body { padding: 0 14px 15px 56px; }
+    .quiz-top { padding: 15px 17px 0; }
+    .quiz-track { margin-inline: 17px; }
+    .quiz-body { padding: 23px 17px 27px; min-height: 445px; }
+    .quiz-option { padding: 11px; font-size: 11.5px; }
+    .result-split { gap: 10px; }
+    .terminal pre { font-size: 9.5px; }
+    .credential { grid-template-columns: 1fr; }
+    .lightbox { padding: 14px; }
+  }
+  @media (max-width: 380px) {
+    .head-inner { gap: 10px; }
+    .head-cta { padding: 0 11px; }
+    .head-cta .arrow { display: none; }
+  }
+  @media (max-width: 350px) {
+    .cta-long { display: none; }
+    .cta-short { display: inline; }
+    .head-cta { padding: 0 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="scroll-line" id="scrollLine" aria-hidden="true"></div>
+
+<header class="site-head" id="top">
+  <div class="wrap head-inner">
+    <a class="brand" href="#top" aria-label="Vehicle Service Manager home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </span>
+      <span>Vehicle Service Manager<small>Built for independent shops</small></span>
+    </a>
+    <nav class="nav" aria-label="Page sections">
+      <a href="#tour">Product tour</a>
+      <a href="#platform">Platform</a>
+      <a href="#economics">Economics</a>
+      <a href="#plans">Plans</a>
+      <a href="#learn">Learn</a>
+      <a href="#quiz">Quiz</a>
+    </nav>
+    <a class="btn btn-primary btn-sm head-cta" href="#run" aria-label="Run the demo"><span class="cta-long">Run the demo</span><span class="cta-short">Demo</span> <span class="arrow" aria-hidden="true">↘</span></a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span> An interactive product brief</p>
+        <h1>Run your shop.<br><em>Not your paperwork.</em></h1>
+        <p class="hero-lede">One calm workspace for the front desk, the bay and the books. Bookings, service orders, photo inspections, estimates, invoices, inventory and follow-up — isolated per shop, ready to white-label.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#tour">Explore the tour <span class="arrow" aria-hidden="true">↓</span></a>
+          <a class="btn btn-ghost" href="#quiz">Take the 3-minute quiz</a>
+        </div>
+        <p class="hero-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> No account needed to explore. The demo runs locally with seeded data.</p>
+        <dl class="hero-metrics">
+          <div><dt>$129B</dt><dd>US auto repair market</dd></div>
+          <div><dt>227,418</dt><dd>active repair locations</dd></div>
+          <div><dt>92%</dt><dd>independent shops</dd></div>
+        </dl>
+      </div>
+
+      <div class="hero-art">
+        <div class="browser">
+          <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span class="browser-url">app.downtownautocare.test / dashboard</span></div>
+          <img src="assets/screenshots/dashboard.png" alt="Vehicle Service Manager dashboard showing revenue, money owed, completed orders and recent activity" width="1425" height="1086">
+        </div>
+        <div class="float-card float-dvi">
+          <div class="float-head"><span>Inspection · front brakes</span><span class="pill-live">COMPLETED</span></div>
+          <img src="assets/screenshots/dvi-order.png" alt="A completed photo inspection for front brake pads marked Attention" width="1425" height="1180">
+          <p><strong>3 mm remaining.</strong> Photo evidence attached to the job and shared on the customer status link.</p>
+        </div>
+        <div class="float-card float-est">
+          <div class="mini">Estimate · ES-00002</div>
+          <div class="amount">$342.00</div>
+          <div class="sub">60,000-mile service · 2019 Toyota Corolla</div>
+          <div class="approved"><span aria-hidden="true">✓</span> Approved by Sara · 9:42 pm</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stat-band" aria-label="Industry context">
+    <div class="wrap">
+      <div class="stat-grid">
+        <div class="stat"><b>$129B</b><span>US auto repair market</span></div>
+        <div class="stat"><b>227,418</b><span>active repair locations</span></div>
+        <div class="stat"><b>~870k</b><span>mechanics keeping the fleet moving</span></div>
+        <div class="stat"><b>5–8%</b><span>of shops belong to the top ten banners</span></div>
+      </div>
+      <div class="stat-source">
+        <span>Source: <a href="https://www.withorbital.com/data/automotive-repair-industry-statistics" target="_blank" rel="noopener noreferrer">Orbital automotive repair industry statistics</a>, updated June 2026. Cloud-software adoption (&lt;35%) is an industry estimate.</span>
+        <span>Directional context, not a forecast.</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" id="tour">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">The day, end to end</p>
+          <h2>One vehicle. <em>Five calm steps.</em></h2>
+        </div>
+        <p class="section-intro">The work is familiar. The difference is that every handoff leaves a record: <strong>the booking, the evidence, the approval, the payment and the reason the customer comes back.</strong></p>
+      </div>
+
+      <div class="day-shell">
+        <div class="day-tabs" role="tablist" aria-label="Customer journey">
+          <button class="day-tab" id="day-tab-0" role="tab" aria-selected="true" aria-controls="day-panel" data-day="0"><span>01</span> Book</button>
+          <button class="day-tab" id="day-tab-1" role="tab" aria-selected="false" aria-controls="day-panel" data-day="1" tabindex="-1"><span>02</span> Inspect</button>
+          <button class="day-tab" id="day-tab-2" role="tab" aria-selected="false" aria-controls="day-panel" data-day="2" tabindex="-1"><span>03</span> Approve</button>
+          <button class="day-tab" id="day-tab-3" role="tab" aria-selected="false" aria-controls="day-panel" data-day="3" tabindex="-1"><span>04</span> Get paid</button>
+          <button class="day-tab" id="day-tab-4" role="tab" aria-selected="false" aria-controls="day-panel" data-day="4" tabindex="-1"><span>05</span> Bring back</button>
+        </div>
+
+        <div class="day-panel" id="day-panel" role="tabpanel" aria-labelledby="day-tab-0">
+          <div class="day-copy">
+            <div class="day-kicker" id="dayKicker">01 — Capture</div>
+            <h3 id="dayTitle">The request becomes a job, not a sticky note.</h3>
+            <p id="dayBody">A customer picks an open slot on a tenant-branded page. The vehicle, the complaint and the contact details arrive in one queue, ready for the front desk to convert into a service order.</p>
+            <ul class="day-list" id="dayList">
+              <li>Public booking page with live availability per shop</li>
+              <li>Vehicle and contact details captured up front</li>
+              <li>Requests land in one inbox, not five channels</li>
+            </ul>
+            <span class="day-meta" id="dayMeta">Public page · no customer account required</span>
+          </div>
+          <figure class="day-figure">
+            <div class="day-frame">
+              <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span class="browser-url" id="dayUrl">downtownautocare.test / book</span></div>
+              <button class="day-zoom" id="dayZoom" type="button" aria-label="Enlarge the current screenshot">
+                <img id="dayImage" src="assets/screenshots/booking-form.png" alt="Public booking page with customer, vehicle and requested service filled in" width="760" height="650">
+              </button>
+            </div>
+            <figcaption class="day-caption"><span class="dot" aria-hidden="true"></span><span id="dayCaption">The booking form does the intake work before the phone rings.</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="platform" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">The platform</p>
+          <h2>Everything a bay touches. <em>Nothing it doesn’t.</em></h2>
+        </div>
+        <p class="section-intro">Nine surfaces, one data model. <strong>Each screen is designed for a specific person</strong> — the owner at 7am, the advisor on the phone, the mechanic with gloves on.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature">
+          <span class="feature-tag">01</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18M8 15h.01M12 15h.01M16 15h.01M8 18h.01M12 18h.01"/></svg></div>
+          <h3>Booking &amp; intake</h3>
+          <p>A tenant-branded page with live slots. Requests become orders without retyping a name, a plate or a complaint.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-tag">02</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></div>
+          <h3>Service orders</h3>
+          <p>One lifecycle from scheduled to invoiced. Labour, parts, technician, location, odometer and a full timeline.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-tag">03</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg></div>
+          <h3>Photo inspections</h3>
+          <p>Condition items with notes and photos. Completed inspections lock, because evidence should not change after the fact.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-tag">04</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l4 4v16H6z"/><path d="M14 2v5h5M9 12h6M9 16h6"/></svg></div>
+          <h3>Estimates &amp; approval</h3>
+          <p>Itemised work, tax and a secure public link. The customer approves from their phone — no account, no PDF tennis.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-tag">05</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19M6 15h3"/></svg></div>
+          <h3>Invoices &amp; payments</h3>
+          <p>Draft, sent, paid, overdue or void. Stripe card payment when configured; the money path is visible to everyone who needs it.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-tag">06</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg></div>
+          <h3>Inventory &amp; suppliers</h3>
+          <p>Parts, stock movements and low-stock signals. Import a supplier price list and turn it into your own catalog.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-tag">07</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
+          <h3>Marketing &amp; reviews</h3>
+          <p>Segments, campaign previews and a review ask at the right moment. Every send is recorded — including the skipped ones.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-tag">08</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3>Roles &amp; audit</h3>
+          <p>Owner, manager, mechanic and viewer. Every sensitive action is written down, tenant by tenant.</p>
+        </article>
+        <article class="feature dark">
+          <span class="feature-tag">09</span>
+          <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/><path d="M18 15v6M15 18h6"/></svg></div>
+          <h3>White-label &amp; API</h3>
+          <p>Brand colours, logo, support email, custom domain and tenant-scoped API keys. Enterprise adds encrypted BYOK.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trust">
+    <div class="wrap">
+      <div class="trust-grid">
+        <div>
+          <p class="eyebrow on-dark">Trust, by construction</p>
+          <h2>Every shop gets <em>its own locked room.</em></h2>
+          <p>Multi-tenancy is not a dropdown in the UI. It is a database boundary. The request resolves a workspace, the workspace sets the transaction context, and PostgreSQL row-level security decides what exists.</p>
+          <ul class="trust-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span>RLS is fail-closed: no tenant context means zero rows, not every row.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span>Plan gates are checked in the API, not just hidden in the interface.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span>Public estimates, reviews and status pages use random, scoped tokens.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span>Security headers, role checks and audit entries are part of the request path.</span></li>
+          </ul>
+        </div>
+        <div class="diagram" aria-label="Illustration of tenant isolation">
+          <div class="diagram-label"><span>Request → context → rows</span><span>Illustrative</span></div>
+          <div class="flow" aria-hidden="true">
+            <span class="chip">JWT</span><span class="arrowline">→</span>
+            <span class="chip">tenant GUC</span><span class="arrowline">→</span>
+            <span class="chip">RLS policy</span>
+          </div>
+          <div class="tenant-stack">
+            <div class="tenant-row"><span><b>Downtown Auto Care</b><br>requested workspace</span><span class="status">visible</span></div>
+            <div class="tenant-row off"><span><b>Quick Lube Co.</b><br>same database</span><span class="status">no access</span></div>
+            <div class="tenant-row off"><span><b>Northside Motors</b><br>same database</span><span class="status">no access</span></div>
+          </div>
+          <div class="diagram-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span>Missing tenant context<strong>0 rows — never all rows.</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="economics">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">The economics</p>
+          <h2>What one extra car a day <em>could be worth.</em></h2>
+        </div>
+        <p class="section-intro">A simple model, not a promise. Change the assumptions to match a real shop. <strong>The result is incremental billed revenue</strong> before parts, payroll and capacity costs.</p>
+      </div>
+
+      <div class="economics-grid">
+        <div class="calc">
+          <h3>Do the math for your shop.</h3>
+          <p class="hint">Illustrative only. Assumes capacity exists and each extra vehicle is billed at the average invoice.</p>
+
+          <div class="field">
+            <label for="avgInvoice">Average invoice <output id="avgInvoiceOut" for="avgInvoice">$586</output></label>
+            <input id="avgInvoice" type="range" min="150" max="1500" step="1" value="586" aria-describedby="calcNote">
+          </div>
+          <div class="field">
+            <label for="extraCars">Additional vehicles per day <output id="extraCarsOut" for="extraCars">1</output></label>
+            <input id="extraCars" type="range" min="0.5" max="4" step="0.5" value="1">
+          </div>
+          <div class="field">
+            <label for="daysOpen">Days open per month <output id="daysOpenOut" for="daysOpen">22</output></label>
+            <input id="daysOpen" type="range" min="16" max="30" step="1" value="22">
+          </div>
+
+          <p class="calc-foot" id="calcNote">US average invoice context: <strong>$586</strong> (Orbital, 2026). This calculator does not model demand, staffing, parts margin or taxes.</p>
+        </div>
+
+        <div class="result-card" aria-live="polite">
+          <div>
+            <div class="result-kicker">Incremental revenue / year</div>
+            <div class="result-number"><span id="annualOut">$154,704</span><small id="annualSub">at $586 per invoice · 264 extra vehicles a year</small></div>
+            <p class="result-caption">That is the value of one more booked vehicle per working day — before the cost of delivering it. The operational win is filling the quiet hours, not discounting the busy ones.</p>
+          </div>
+          <div class="result-split">
+            <div><b id="monthlyOut">$12,892</b><span>per month</span></div>
+            <div><b id="vehiclesOut">264</b><span>extra vehicles / year</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="plans" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Plans</p>
+          <h2>Start small. <em>Grow into the whole shop.</em></h2>
+        </div>
+        <p class="section-intro">Limits and features are enforced on the server. <strong>Every plan includes tenant isolation, role-based access and the core service workflow.</strong></p>
+      </div>
+
+      <div class="plans">
+        <article class="plan">
+          <div class="plan-name">Free</div>
+          <div class="plan-price">$0 <small>/ month</small></div>
+          <p class="plan-desc">For a single bay getting organised, with the essential service workflow.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Up to 3 users</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>50 vehicles</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>100 orders per month</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Booking, orders and invoicing</li>
+            <li class="off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>Photo inspections</li>
+            <li class="off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>Inventory and marketing</li>
+          </ul>
+          <a class="btn btn-ghost btn-sm" href="#run">Explore Free <span class="arrow" aria-hidden="true">↘</span></a>
+        </article>
+
+        <article class="plan featured">
+          <span class="plan-badge">Most popular</span>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">$29 <small>/ month</small></div>
+          <p class="plan-desc">The whole toolbox for a busy shop that wants the office to run itself.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>20 users · 1,000 vehicles</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>5,000 orders per month</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Photo inspections and audit log</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Inventory, suppliers and marketing</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Payments, SMS and review requests</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>White-label, domain, API and accounting sync</li>
+          </ul>
+          <a class="btn btn-primary btn-sm" href="#run">Explore Pro <span class="arrow" aria-hidden="true">↘</span></a>
+        </article>
+
+        <article class="plan">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price">$99 <small>/ month</small></div>
+          <p class="plan-desc">For groups that need no ceilings and control over their own encryption keys.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Unlimited users and vehicles</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Unlimited orders</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Every Pro capability</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>BYOK — bring your own keys</li>
+          </ul>
+          <a class="btn btn-ghost btn-sm" href="#run">Explore Enterprise <span class="arrow" aria-hidden="true">↘</span></a>
+        </article>
+      </div>
+      <p class="plan-note">Prices in USD, excluding applicable taxes. Limits reflect the checked-in plan seed; review before a commercial launch.</p>
+    </div>
+  </section>
+
+  <section class="section" id="learn">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">The learning path</p>
+          <h2>From “what is a DVI?” <em>to “I can run this.”</em></h2>
+        </div>
+        <p class="section-intro">Six short modules explain the product and the ideas underneath it. <strong>No jargon without a translation.</strong> Tick them off as you go; progress stays in this browser.</p>
+      </div>
+
+      <div class="learn-shell">
+        <aside class="learn-aside">
+          <h3>Your progress</h3>
+          <p>Read a module, mark it complete, and the bar remembers. When you are ready, the 12-question quiz checks the whole picture.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Modules complete</span><span id="learnCount">0 of 6</span></div>
+            <div class="progress-track" role="progressbar" aria-label="Learning modules complete" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" id="learnTrack"><span id="learnBar"></span></div>
+          </div>
+          <p class="learn-foot">Prefer to learn by doing? <a href="#run">Run the seeded demo</a> and follow the first five minutes.</p>
+          <div class="learn-done" id="learnDone" role="status">All six modules complete. You are ready for the quiz.</div>
+        </aside>
+
+        <div class="module-list">
+          <details class="module" open>
+            <summary>
+              <span class="module-num">01</span>
+              <span class="module-title">The locked room: workspaces and RLS<small>Why one database can serve many shops safely</small></span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="module-body">
+              <p>A workspace (or tenant) is one shop’s account. Every customer, vehicle, order and invoice belongs to exactly one workspace.</p>
+              <ul>
+                <li><strong>Tenant context</strong> is resolved from the request: a header, a subdomain or a verified custom domain.</li>
+                <li><strong>Row-level security</strong> is a PostgreSQL policy that filters rows by that context — even if application code forgets a filter.</li>
+                <li><strong>Fail-closed</strong> means no context produces no rows. It never means “show everything.”</li>
+              </ul>
+              <label class="module-check"><input type="checkbox" data-module="0"> Mark this module complete</label>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>
+              <span class="module-num">02</span>
+              <span class="module-title">The job lifecycle<small>From booking request to closed invoice</small></span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="module-body">
+              <p>A <strong>booking</strong> is an inbound request. A <strong>service order</strong> is the operational job the shop owns, with a status and a timeline.</p>
+              <ul>
+                <li>Statuses move from scheduled through in progress and awaiting parts to completed, invoiced or cancelled.</li>
+                <li>Line items separate labour from parts, which keeps totals and exports honest.</li>
+                <li>The status link is public but tokenized: the customer sees one job, not the workspace.</li>
+              </ul>
+              <label class="module-check"><input type="checkbox" data-module="1"> Mark this module complete</label>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>
+              <span class="module-num">03</span>
+              <span class="module-title">Evidence, not adjectives<small>How a photo inspection changes the conversation</small></span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="module-body">
+              <p>A DVI is a checklist with condition, notes and photos. It turns “your brakes are worn” into “3 mm remaining, here is the photo.”</p>
+              <ul>
+                <li>Items can be marked for attention and included in the estimate conversation.</li>
+                <li>Completed inspections lock, so the evidence cannot be rewritten later.</li>
+                <li>Customers see the relevant photo on the status page without a login.</li>
+              </ul>
+              <label class="module-check"><input type="checkbox" data-module="2"> Mark this module complete</label>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>
+              <span class="module-num">04</span>
+              <span class="module-title">The money path<small>Estimate, approval, invoice, payment</small></span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="module-body">
+              <p>An <strong>estimate</strong> proposes work. An <strong>invoice</strong> requests payment. Keeping them separate protects the shop and the customer.</p>
+              <ul>
+                <li>An estimate token lets the customer approve or decline without an account.</li>
+                <li>Invoices track draft, sent, paid, overdue and void; revenue on the dashboard means paid, not promised.</li>
+                <li>Stripe checkout collects the card payment; accounting adapters and CSV export carry the journal.</li>
+              </ul>
+              <label class="module-check"><input type="checkbox" data-module="3"> Mark this module complete</label>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>
+              <span class="module-num">05</span>
+              <span class="module-title">The retention loop<small>Reviews, reminders and the outbox</small></span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="module-body">
+              <p>The cheapest customer is the one already in your database. The loop closes the day with a review ask and brings the next service forward with a reminder.</p>
+              <ul>
+                <li>Segments select customers by real criteria, not a copied spreadsheet.</li>
+                <li>Campaigns preview the message and count recipients before sending.</li>
+                <li>The outbox records sent, skipped and failed. “Skipped” is honest when SMS is not configured.</li>
+              </ul>
+              <label class="module-check"><input type="checkbox" data-module="4"> Mark this module complete</label>
+            </div>
+          </details>
+
+          <details class="module">
+            <summary>
+              <span class="module-num">06</span>
+              <span class="module-title">Operating safely<small>Roles, entitlements, audit and tokens</small></span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="module-body">
+              <p>A feature is not secure because the button is hidden. It is secure when the API refuses the request anyway.</p>
+              <ul>
+                <li>Roles decide who can change money, people and settings; viewers read.</li>
+                <li>Entitlements decide which plan features the workspace may use, on the server.</li>
+                <li>Audit entries, scoped tokens and security headers make the boundary observable.</li>
+              </ul>
+              <label class="module-check"><input type="checkbox" data-module="5"> Mark this module complete</label>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section quiz-section" id="quiz">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">The quiz</p>
+          <h2>Twelve questions. <em>One clear picture.</em></h2>
+        </div>
+        <p class="section-intro">Every answer comes with a short explanation. <strong>No score is stored</strong> and you can retry as often as you like.</p>
+      </div>
+
+      <div class="quiz-shell">
+        <div class="quiz-top">
+          <span class="quiz-meta" id="quizStep">Question 1 of 12</span>
+          <span class="quiz-score" id="quizScore">0 correct</span>
+        </div>
+        <div class="quiz-track"><span id="quizBar"></span></div>
+        <div class="quiz-body" id="quizBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap faq-grid">
+      <div class="faq-aside">
+        <p class="eyebrow">Straight answers</p>
+        <h2>Questions, <em>answered plainly.</em></h2>
+        <p>If something here sounds too good, it probably needs a provider key, a migration or a real-world test. That is the honest version.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item" open>
+          <summary>Can I try it without Stripe or an email provider?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary>
+          <p>Yes. The seeded demo runs with a safe stub billing provider. Email and SMS messages are recorded in the outbox as <strong>Skipped</strong> when credentials are absent, so the workflow stays truthful without pretending a message left the building.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is one shop’s data really invisible to another?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary>
+          <p>The API runs as a non-owner database role with row-level security enabled. Every tenant-owned query runs inside a transaction with the resolved workspace context. A missing context is fail-closed: zero rows, not every row.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does it send real email or text messages?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary>
+          <p>It can, through SMTP and a Twilio-compatible SMS adapter. Without credentials, delivery is marked skipped. Real deliverability, sender reputation and opt-in compliance still need provider-side testing.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I put my own brand and domain on it?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary>
+          <p>On Pro and Enterprise, yes: logo, colours, support email and a custom domain. Domains are verified with a TXT record before the edge will route them, and certificates are issued on demand.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is this a finished commercial SaaS?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary>
+          <p>It is a production-shaped foundation. Billing defaults to a stub, certifications and penetration testing are not included, supplier and accounting adapters need credentials, and there is no cross-region failover. Add a license and complete a security review before selling it as a service.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What is it built with?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary>
+          <p>A Next.js 16 App Router frontend, a FastAPI/Python API, PostgreSQL with row-level security, Redis for throttling, and Caddy at the edge. Docker Compose runs the whole stack locally; the frontend is installable as a PWA.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section run" id="run">
+    <div class="wrap run-grid">
+      <div>
+        <p class="eyebrow on-dark">The live demo</p>
+        <h2>See the real thing <em>on your machine.</em></h2>
+        <p>The preview is static. The product is not. Start the stack, run the migration and seed, then sign into a workspace with real orders, inspections, estimates and invoices.</p>
+        <p class="run-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Requires Docker with Compose v2. The demo password is intentionally public and only for local use.</span></p>
+      </div>
+      <div>
+        <div class="terminal">
+          <div class="terminal-head"><span>terminal · from the repository root</span><button class="copy-btn" id="copyRun" type="button">Copy commands</button></div>
+          <pre id="runCode"><span class="c"># 1. configure and start</span>
+cp .env.example .env
+make up
+make migrate
+
+<span class="c"># 2. open the app (ports 80/443 free)</span>
+<span class="g">http://localhost/login?demo=1</span>
+
+<span class="c"># or, with the checked-in :8090 override</span>
+<span class="g">http://localhost:8090/login?demo=1</span></pre>
+        </div>
+        <div class="credential">
+          <div><span>Workspace</span><b>demo</b></div>
+          <div><span>Email</span><b>owner@demo.example</b></div>
+          <div><span>Password</span><b>demo-password-123</b></div>
+          <div><span>Second seeded shop</span><b>quicklube</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <div>
+      <div class="foot-brand">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+        Vehicle Service Manager
+      </div>
+      <div class="foot-note" style="margin-top:10px;text-align:left;">An interactive product preview. Market statistics are directional and linked to their source. Prices are USD, excluding tax.</div>
+    </div>
+    <div class="foot-note">
+      <a href="README.md">Read the README</a> · <a href="#top">Back to top</a><br>
+      <span style="display:inline-block;margin-top:6px;">Built for the people who keep the world moving.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot preview" hidden>
+  <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close screenshot preview">×</button>
+  <div class="lightbox-inner">
+    <img id="lightboxImage" src="" alt="">
+    <div class="lightbox-caption"><span id="lightboxCaption"></span><span>Press Esc to close</span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Header state + reading progress */
+  var head = document.querySelector(".site-head");
+  var scrollLine = document.getElementById("scrollLine");
+  function onScroll() {
+    var y = window.scrollY || document.documentElement.scrollTop;
+    if (head) head.classList.toggle("is-scrolled", y > 8);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollLine) scrollLine.style.width = (h > 0 ? Math.min(100, y / h * 100) : 0) + "%";
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* Product tour tabs */
+  var dayData = [
+    {
+      url: "downtownautocare.test / book",
+      image: "assets/screenshots/booking-form.png",
+      alt: "Public booking page with customer, vehicle and requested service filled in",
+      caption: "The booking form does the intake work before the phone rings.",
+      kicker: "01 — Capture",
+      title: "The request becomes a job, not a sticky note.",
+      body: "A customer picks an open slot on a tenant-branded page. The vehicle, the complaint and the contact details arrive in one queue, ready for the front desk to convert into a service order.",
+      bullets: [
+        "Public booking page with live availability per shop",
+        "Vehicle and contact details captured up front",
+        "Requests land in one inbox, not five channels"
+      ],
+      meta: "Public page · no customer account required"
+    },
+    {
+      url: "app.downtownautocare.test / orders / SO-00010",
+      image: "assets/screenshots/dvi-order.png",
+      alt: "Completed service order with line items and a photo inspection of front brake pads",
+      caption: "A job, its lines and its evidence in one place.",
+      kicker: "02 — Inspect",
+      title: "Evidence beats adjectives.",
+      body: "The mechanic records condition, notes and a photo against the job. The advisor can show the customer exactly what was found — and the completed inspection locks so the story cannot change later.",
+      bullets: [
+        "Inspection items with condition and notes",
+        "Photos attached to the vehicle’s record",
+        "Completed inspections locked for integrity"
+      ],
+      meta: "DVI · photos · locked after completion"
+    },
+    {
+      url: "downtownautocare.test / estimate / ES-00002",
+      image: "assets/screenshots/estimate-public.png",
+      alt: "Public estimate page with itemised labour and parts and an approve button",
+      caption: "An itemised decision, made on a phone at 9:42 pm.",
+      kicker: "03 — Approve",
+      title: "A decision the customer can make at 9pm.",
+      body: "The estimate carries labour, parts, tax and a secure public token. The customer approves or declines from their phone. No account, no portal password, no “please print and sign.”",
+      bullets: [
+        "Itemised labour and parts with tax",
+        "Random token scoped to one estimate",
+        "Approval recorded back on the job"
+      ],
+      meta: "Secure link · approve or decline · no account"
+    },
+    {
+      url: "app.downtownautocare.test / invoices",
+      image: "assets/screenshots/invoices.png",
+      alt: "Invoice list showing paid and sent invoices with amounts",
+      caption: "Paid, sent, overdue — the state is never implied.",
+      kicker: "04 — Get paid",
+      title: "The money path is visible.",
+      body: "Draft, send and settle invoices with due dates and tax. Card payment runs through Stripe when configured, and the dashboard shows collected revenue separately from money still owed.",
+      bullets: [
+        "Draft, sent, paid, overdue and void states",
+        "Stripe checkout links for card payment",
+        "Revenue means paid; money owed stays separate"
+      ],
+      meta: "Invoices · payments · accounting export"
+    },
+    {
+      url: "app.downtownautocare.test / marketing",
+      image: "assets/screenshots/marketing.png",
+      alt: "Marketing campaign builder with customer segments and recipient counts",
+      caption: "The follow-up is part of the job, not an afterthought.",
+      kicker: "05 — Bring back",
+      title: "Retention without another spreadsheet.",
+      body: "Segment the customer list, preview the message and see the recipient count before anything sends. A review request goes out after the work, and the next service reminder goes into the same honest outbox.",
+      bullets: [
+        "Segments built from real customer data",
+        "Campaign preview and recipient counts",
+        "Sent, skipped and failed all recorded"
+      ],
+      meta: "Segments · campaigns · review links · outbox"
+    }
+  ];
+
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".day-tab"));
+  var dayPanel = document.getElementById("day-panel");
+  var dayKicker = document.getElementById("dayKicker");
+  var dayTitle = document.getElementById("dayTitle");
+  var dayBody = document.getElementById("dayBody");
+  var dayList = document.getElementById("dayList");
+  var dayMeta = document.getElementById("dayMeta");
+  var dayImage = document.getElementById("dayImage");
+  var dayCaption = document.getElementById("dayCaption");
+  var dayUrl = document.getElementById("dayUrl");
+  var currentDay = 0;
+
+  function setDay(index, moveFocus) {
+    var d = dayData[index];
+    if (!d) return;
+    currentDay = index;
+    tabs.forEach(function (tab, i) {
+      var selected = i === index;
+      tab.setAttribute("aria-selected", selected ? "true" : "false");
+      tab.tabIndex = selected ? 0 : -1;
+      if (selected && moveFocus) tab.focus();
+    });
+    dayPanel.setAttribute("aria-labelledby", "day-tab-" + index);
+    dayKicker.textContent = d.kicker;
+    dayTitle.textContent = d.title;
+    dayBody.textContent = d.body;
+    dayList.innerHTML = d.bullets.map(function (b) { return "<li>" + b + "</li>"; }).join("");
+    dayMeta.textContent = d.meta;
+    dayCaption.textContent = d.caption;
+    dayUrl.textContent = d.url;
+    dayImage.classList.add("is-swapping");
+    var next = new Image();
+    next.onload = function () {
+      dayImage.src = d.image;
+      dayImage.alt = d.alt;
+      dayImage.classList.remove("is-swapping");
+    };
+    next.src = d.image;
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener("click", function () { setDay(i, false); });
+    tab.addEventListener("keydown", function (e) {
+      var next = null;
+      if (e.key === "ArrowRight") next = (i + 1) % tabs.length;
+      if (e.key === "ArrowLeft") next = (i - 1 + tabs.length) % tabs.length;
+      if (e.key === "Home") next = 0;
+      if (e.key === "End") next = tabs.length - 1;
+      if (next !== null) { e.preventDefault(); setDay(next, true); }
+    });
+  });
+
+  /* Lightbox */
+  var lightbox = document.getElementById("lightbox");
+  var lightboxImage = document.getElementById("lightboxImage");
+  var lightboxCaption = document.getElementById("lightboxCaption");
+  var lightboxClose = document.getElementById("lightboxClose");
+  var lastFocus = null;
+
+  function openLightbox(src, alt, caption) {
+    lastFocus = document.activeElement;
+    lightboxImage.src = src;
+    lightboxImage.alt = alt;
+    lightboxCaption.textContent = caption;
+    lightbox.hidden = false;
+    document.body.classList.add("no-scroll");
+    lightboxClose.focus();
+  }
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightboxImage.src = "";
+    document.body.classList.remove("no-scroll");
+    if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+  }
+  document.getElementById("dayZoom").addEventListener("click", function () {
+    var d = dayData[currentDay];
+    openLightbox(d.image, d.alt, d.caption);
+  });
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", function (e) { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !lightbox.hidden) closeLightbox();
+  });
+
+  /* Economics calculator */
+  var avg = document.getElementById("avgInvoice");
+  var extra = document.getElementById("extraCars");
+  var days = document.getElementById("daysOpen");
+  var avgOut = document.getElementById("avgInvoiceOut");
+  var extraOut = document.getElementById("extraCarsOut");
+  var daysOut = document.getElementById("daysOpenOut");
+  var annualOut = document.getElementById("annualOut");
+  var annualSub = document.getElementById("annualSub");
+  var monthlyOut = document.getElementById("monthlyOut");
+  var vehiclesOut = document.getElementById("vehiclesOut");
+
+  function money(n) { return "$" + Math.round(n).toLocaleString("en-US"); }
+  function num(n) {
+    return Number(n).toLocaleString("en-US", { maximumFractionDigits: 1 });
+  }
+  function updateCalc() {
+    var invoice = Number(avg.value);
+    var add = Number(extra.value);
+    var open = Number(days.value);
+    var monthly = invoice * add * open;
+    var annual = monthly * 12;
+    var vehicles = add * open * 12;
+    avgOut.textContent = "$" + invoice.toLocaleString("en-US");
+    extraOut.textContent = num(add);
+    daysOut.textContent = open;
+    annualOut.textContent = money(annual);
+    annualSub.textContent = "at " + money(invoice) + " per invoice · " + num(vehicles) + " extra vehicles a year";
+    monthlyOut.textContent = money(monthly);
+    vehiclesOut.textContent = num(vehicles);
+  }
+  [avg, extra, days].forEach(function (input) { input.addEventListener("input", updateCalc); });
+  updateCalc();
+
+  /* Learning progress */
+  var boxes = Array.prototype.slice.call(document.querySelectorAll("[data-module]"));
+  var learnBar = document.getElementById("learnBar");
+  var learnCount = document.getElementById("learnCount");
+  var learnTrack = document.getElementById("learnTrack");
+  var learnDone = document.getElementById("learnDone");
+  var storageKey = "vsm-preview-learning-v1";
+
+  function readProgress() {
+    try {
+      var raw = localStorage.getItem(storageKey);
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (err) { return []; }
+  }
+  function saveProgress(values) {
+    try { localStorage.setItem(storageKey, JSON.stringify(values)); } catch (err) { /* private mode */ }
+  }
+  function updateLearn() {
+    var done = boxes.filter(function (b) { return b.checked; }).length;
+    var pct = boxes.length ? done / boxes.length * 100 : 0;
+    learnBar.style.width = pct + "%";
+    learnCount.textContent = done + " of " + boxes.length;
+    learnTrack.setAttribute("aria-valuenow", String(done));
+    learnDone.classList.toggle("show", done === boxes.length);
+    saveProgress(boxes.map(function (b, i) { return b.checked ? i : -1; }).filter(function (i) { return i >= 0; }));
+  }
+  var saved = readProgress();
+  boxes.forEach(function (box, i) {
+    box.checked = saved.indexOf(i) !== -1;
+    box.addEventListener("change", updateLearn);
+  });
+  updateLearn();
+
+  /* Quiz */
+  var questions = [
+    {
+      tag: "Tenancy",
+      q: "What does row-level security protect against?",
+      options: [
+        "A slow dashboard when a shop has many orders",
+        "A missing tenant filter leaking another shop’s rows",
+        "A customer opening their status link twice",
+        "A plan upgrade without a payment"
+      ],
+      answer: 1,
+      why: "RLS applies at the database layer. Even if application code forgets a tenant filter, the policy prevents rows from another workspace from appearing."
+    },
+    {
+      tag: "Public links",
+      q: "A customer approves an estimate without an account. What grants access?",
+      options: [
+        "Their email address is matched to the customer record",
+        "A random token scoped to that one estimate",
+        "The workspace password is shared with them",
+        "The estimate is public to everyone in the database"
+      ],
+      answer: 1,
+      why: "A random, scoped token reveals only the intended estimate. It does not grant a workspace session or expose other records."
+    },
+    {
+      tag: "The money path",
+      q: "What is the difference between an estimate and an invoice?",
+      options: [
+        "An estimate is for parts; an invoice is for labour",
+        "An estimate proposes work; an invoice requests payment",
+        "They are the same document at different tax rates",
+        "An invoice is only created after a card payment succeeds"
+      ],
+      answer: 1,
+      why: "The estimate asks for a decision before work. The invoice asks for money after work is agreed or completed. Keeping them separate preserves the audit trail."
+    },
+    {
+      tag: "Inspections",
+      q: "Why does a completed inspection lock?",
+      options: [
+        "To stop mechanics from adding photos",
+        "Because the database cannot store new files",
+        "Because evidence should not change after completion",
+        "To force the customer to approve it"
+      ],
+      answer: 2,
+      why: "A completed inspection is evidence used in a customer conversation. Allowing edits afterwards would undermine trust in the record."
+    },
+    {
+      tag: "Entitlements",
+      q: "Where must a plan-gated feature be enforced?",
+      options: [
+        "Only in the navigation menu",
+        "In the browser with CSS",
+        "On the server or API",
+        "In the marketing page copy"
+      ],
+      answer: 2,
+      why: "Hiding a button is a UX decision. The API must reject the request, because a client can always call the endpoint directly."
+    },
+    {
+      tag: "Operations",
+      q: "What does the notification outbox record?",
+      options: [
+        "Only messages that were successfully delivered",
+        "Every send attempt, including skipped and failed",
+        "Only SMS messages, not email",
+        "The customer’s inbox contents"
+      ],
+      answer: 1,
+      why: "The outbox makes outcomes explicit: sent, skipped and failed are different states. That is especially important when a provider is not configured."
+    },
+    {
+      tag: "Custom domains",
+      q: "What should happen before a custom domain is routed to a workspace?",
+      options: [
+        "The owner uploads a logo",
+        "A TXT record proves ownership of the domain",
+        "The shop pays for a second plan",
+        "The domain is added to every workspace"
+      ],
+      answer: 1,
+      why: "TXT verification proves control of the domain before the edge issues a certificate and routes traffic. Otherwise anyone could claim someone else’s hostname."
+    },
+    {
+      tag: "Security",
+      q: "A button is hidden for a Free workspace. Is the feature secure?",
+      options: [
+        "Yes, because the user cannot see the button",
+        "Yes, if the CSS is minified",
+        "No, the API can still be called directly",
+        "Only if the browser is in private mode"
+      ],
+      answer: 2,
+      why: "Client-side hiding is not a boundary. The server must check the workspace’s entitlement before performing the action."
+    },
+    {
+      tag: "Email",
+      q: "SMTP is not configured. What is the honest behaviour for an email?",
+      options: [
+        "Pretend it was sent",
+        "Throw away the message silently",
+        "Record it as skipped in the outbox",
+        "Open the user’s mail client"
+      ],
+      answer: 2,
+      why: "Skipped is an explicit, inspectable outcome. Silently dropping the message or claiming success makes the system untrustworthy."
+    },
+    {
+      tag: "Billing",
+      q: "What does “revenue” mean on the dashboard?",
+      options: [
+        "Every draft invoice",
+        "Paid invoices, not money owed",
+        "The total of all estimates",
+        "The plan subscription price"
+      ],
+      answer: 1,
+      why: "Collected revenue and outstanding money are different signals. Mixing them flatters the business and hides collection problems."
+    },
+    {
+      tag: "Lifecycle",
+      q: "How is a booking different from a service order?",
+      options: [
+        "A booking is an inbound request; an order is the operational job",
+        "A booking includes parts; an order never does",
+        "A booking is only for returning customers",
+        "They are identical records with different colours"
+      ],
+      answer: 0,
+      why: "The booking captures demand. The service order is the shop’s owned job with a status, line items, technician, timeline and money."
+    },
+    {
+      tag: "Platform",
+      q: "What does BYOK mean on the Enterprise plan?",
+      options: [
+        "Bring your own keyboard",
+        "Bring your own keys, encrypted per workspace",
+        "Book your own kickoff",
+        "Back up your own database nightly"
+      ],
+      answer: 1,
+      why: "BYOK lets a workspace supply its own provider keys, stored with envelope encryption. It is a control and compliance feature, not a keyboard shortcut."
+    }
+  ];
+
+  var quizBody = document.getElementById("quizBody");
+  var quizStep = document.getElementById("quizStep");
+  var quizScoreEl = document.getElementById("quizScore");
+  var quizBar = document.getElementById("quizBar");
+  var qIndex = 0;
+  var score = 0;
+  var locked = false;
+
+  function renderQuestion() {
+    var q = questions[qIndex];
+    locked = false;
+    quizStep.textContent = "Question " + (qIndex + 1) + " of " + questions.length;
+    quizScoreEl.textContent = score + " correct";
+    quizBar.style.width = ((qIndex + 1) / questions.length * 100) + "%";
+    quizBody.innerHTML =
+      '<div class="q-tag">' + q.tag + '</div>' +
+      '<h3 class="q-title" id="quizQuestion">' + q.q + '</h3>' +
+      '<div class="options" role="group" aria-labelledby="quizQuestion">' +
+      q.options.map(function (opt, i) {
+        return '<button class="quiz-option" type="button" data-option="' + i + '">' +
+          '<span class="quiz-letter">' + String.fromCharCode(65 + i) + '</span><span>' + opt + '</span></button>';
+      }).join("") +
+      '</div>' +
+      '<div class="feedback" id="quizFeedback" aria-live="polite" hidden></div>' +
+      '<button class="btn btn-primary btn-sm quiz-next" id="quizNext" type="button" hidden>Next question <span class="arrow" aria-hidden="true">→</span></button>';
+
+    Array.prototype.forEach.call(quizBody.querySelectorAll(".quiz-option"), function (button) {
+      button.addEventListener("click", function () { answerQuestion(Number(button.getAttribute("data-option"))); });
+    });
+    document.getElementById("quizNext").addEventListener("click", nextQuestion);
+  }
+
+  function answerQuestion(choice) {
+    if (locked) return;
+    locked = true;
+    var q = questions[qIndex];
+    var options = Array.prototype.slice.call(quizBody.querySelectorAll(".quiz-option"));
+    var correct = choice === q.answer;
+    if (correct) score++;
+    options.forEach(function (button, i) {
+      button.disabled = true;
+      if (i === q.answer) button.classList.add("correct");
+      if (i === choice && !correct) button.classList.add("wrong");
+      button.setAttribute("aria-pressed", i === choice ? "true" : "false");
+    });
+    var feedback = document.getElementById("quizFeedback");
+    feedback.innerHTML = "<strong>" + (correct ? "Right." : "Not quite.") + "</strong> " + q.why;
+    feedback.hidden = false;
+    quizScoreEl.textContent = score + " correct";
+    var next = document.getElementById("quizNext");
+    next.hidden = false;
+    next.innerHTML = (qIndex === questions.length - 1 ? "See my result" : "Next question") + ' <span class="arrow" aria-hidden="true">→</span>';
+    next.focus();
+  }
+
+  function nextQuestion() {
+    qIndex++;
+    if (qIndex < questions.length) renderQuestion();
+    else renderResult();
+  }
+
+  function renderResult() {
+    quizStep.textContent = "Quiz complete";
+    quizScoreEl.textContent = score + " of " + questions.length + " correct";
+    quizBar.style.width = "100%";
+    var pct = Math.round(score / questions.length * 100);
+    var tier = "Apprentice";
+    var copy = "You have the vocabulary. Read the learning path once more, then try the tour again — the second pass is where it clicks.";
+    if (score >= 11) {
+      tier = "Workshop expert";
+      copy = "You can explain the product, the boundary and the money path. You would hold your own in an implementation or interview conversation.";
+    } else if (score >= 9) {
+      tier = "Shop foreman";
+      copy = "Strong picture. Revisit the questions you missed and you will have the whole system end to end.";
+    } else if (score >= 6) {
+      tier = "Service advisor";
+      copy = "The core is there. The misses are likely in the platform layer: tenancy, entitlements, outbox and billing states.";
+    }
+    quizBody.innerHTML =
+      '<div class="result-view">' +
+        '<div class="result-ring" style="--pct:' + pct + '%"><div><div><b>' + score + '</b><span>out of ' + questions.length + '</span></div></div></div>' +
+        '<h3 class="result-title">' + tier + '</h3>' +
+        '<p class="result-copy">' + copy + '</p>' +
+        '<div class="quiz-actions">' +
+          '<button class="btn btn-primary btn-sm" id="quizRetry" type="button">Retry the quiz</button>' +
+          '<a class="btn btn-ghost btn-sm" href="#learn">Back to the learning path</a>' +
+        '</div>' +
+      '</div>';
+    document.getElementById("quizRetry").addEventListener("click", function () {
+      qIndex = 0;
+      score = 0;
+      renderQuestion();
+    });
+    var ring = quizBody.querySelector(".result-ring");
+    if (ring) ring.setAttribute("aria-label", score + " out of " + questions.length + " correct");
+  }
+
+  renderQuestion();
+
+  /* Copy run commands */
+  var copyRun = document.getElementById("copyRun");
+  var runCode = document.getElementById("runCode");
+  if (copyRun && runCode) {
+    copyRun.addEventListener("click", function () {
+      var text = runCode.textContent.replace(/\u00a0/g, " ");
+      function done(ok) {
+        copyRun.textContent = ok ? "Copied" : "Select and copy";
+        window.setTimeout(function () { copyRun.textContent = "Copy commands"; }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      } else {
+        try {
+          var area = document.createElement("textarea");
+          area.value = text;
+          area.setAttribute("readonly", "");
+          area.style.position = "fixed";
+          area.style.opacity = "0";
+          document.body.appendChild(area);
+          area.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(area);
+          done(ok);
+        } catch (err) { done(false); }
+      }
+    });
+  }
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vehicle Service Manager",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "A multi-tenant workspace for independent auto shops: service orders, photo inspections, estimates, invoices, inventory and marketing.",
+  "offers": [
+    {"@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD"},
+    {"@type": "Offer", "name": "Pro", "price": "29", "priceCurrency": "USD"},
+    {"@type": "Offer", "name": "Enterprise", "price": "99", "priceCurrency": "USD"}
+  ]
+}
+</script>
+</body>
+</html>

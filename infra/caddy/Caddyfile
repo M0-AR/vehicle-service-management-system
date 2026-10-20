@@ -1,0 +1,98 @@
+# Caddy edge — TLS termination + tenant routing.
+#
+# Local mode (PLATFORM_BASE_DOMAIN=localhost):
+#   http://localhost            → app       (also http://<slug>.localhost)
+#   http://localhost/api/*      → backend
+#
+# Production mode (PLATFORM_BASE_DOMAIN=example.com):
+#   https://example.com                 → marketing + app shell
+#   https://<slug>.example.com          → tenant subdomain (wildcard cert)
+#   https://app.customer.com            → verified custom domain
+#
+# Custom-domain TLS uses ON-DEMAND certificates, gated by the `ask` endpoint
+# (backend /api/v1/tls/ask returns 200 only for verified tenant domains, 403
+# otherwise — Caddy then refuses to issue). This prevents TLS-issuance abuse.
+# Verified pattern: https://www.bigiron.cc/guides/caddy-advanced-on-demand-tls-and-dynamic-config-with-the-admin-api
+{
+	email {$ACME_EMAIL}
+	on_demand_tls {
+		ask http://backend:8000/api/v1/tls/ask
+	}
+	servers {
+		metrics
+	}
+}
+
+# Baseline security headers for every site. The CSP allows Next.js inline
+# hydration scripts and tenant logos hosted anywhere; everything else is
+# same-origin. Add HSTS only where TLS is actually served.
+(security_headers) {
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+	}
+}
+
+# ── Local development ────────────────────────────────────────────────────────
+http://localhost, http://*.localhost, http://127.0.0.1 {
+	import security_headers
+	encode zstd gzip
+	@api path /api/*
+	handle @api {
+		reverse_proxy backend:8000
+	}
+	handle {
+		reverse_proxy frontend:3000
+	}
+}
+
+# ── Platform host (production) ───────────────────────────────────────────────
+{$PLATFORM_BASE_DOMAIN} {
+	import security_headers
+	header Strict-Transport-Security "max-age=31536000"
+	encode zstd gzip
+	@api path /api/*
+	handle @api {
+		reverse_proxy backend:8000
+	}
+	handle {
+		reverse_proxy frontend:3000
+	}
+}
+
+# ── Tenant subdomains: <slug>.{$PLATFORM_BASE_DOMAIN} (wildcard, on-demand) ──
+https://*.{$PLATFORM_BASE_DOMAIN} {
+	tls {
+		on_demand
+	}
+	import security_headers
+	header Strict-Transport-Security "max-age=31536000"
+	encode zstd gzip
+	@api path /api/*
+	handle @api {
+		reverse_proxy backend:8000
+	}
+	handle {
+		reverse_proxy frontend:3000
+	}
+}
+
+# ── Verified tenant custom domains (any SNI that passes the ask check) ───────
+:443 {
+	tls {
+		on_demand
+	}
+	import security_headers
+	header Strict-Transport-Security "max-age=31536000"
+	encode zstd gzip
+	@api path /api/*
+	handle @api {
+		reverse_proxy backend:8000
+	}
+	handle {
+		reverse_proxy frontend:3000
+	}
+}

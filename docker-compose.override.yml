@@ -1,0 +1,10 @@
+# Local development override — keeps the production ports 80/443 free for
+# other projects on this host and matches the dev frontend's BACKEND_INTERNAL_URL.
+#   http://localhost:8090  → caddy edge (API + app)
+#   https://localhost:8453 → caddy edge (TLS, local certs)
+services:
+  caddy:
+    ports: !override
+      - "8090:80"
+      - "8453:443"
+      - "8453:443/udp"
